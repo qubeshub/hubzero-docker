@@ -41,7 +41,7 @@ ddev launch
 
 - `.ddev/config.yaml`
   - `docroot: public`
-  - `webserver_type: apache-fpm`
+  - `webserver_type: nginx-fpm`
   - `upload_dirs: app` (So Mutagen doesn't sync these files)
   - `web_extra_daemons`: Launch Solr
 - `mysql/sql-mode.cnf`: Make sure mysql strict mode isn't set so migrations can run
@@ -49,5 +49,6 @@ ddev launch
 
 # Current issues
 
-Can't login and all clicked links don't work
+- Can't log into admin interace (404)
+- When `webserver_type` is `apache-fpm`, front page will load but all links lead to a 404
 
