@@ -28,4 +28,26 @@ ddev ssh
 cd public/core
 php bin/composer install
 php bin/muse migration -f
+exit
 ```
+
+(5) Launch the site!
+
+```bash
+ddev launch
+```
+
+# Additional DDEV Configuration
+
+- `.ddev/config.yaml`
+  - `docroot: public`
+  - `webserver_type: apache-fpm`
+  - `upload_dirs: app` (So Mutagen doesn't sync these files)
+  - `web_extra_daemons`: Launch Solr
+- `mysql/sql-mode.cnf`: Make sure mysql strict mode isn't set so migrations can run
+- `web-build/Dockerfile`: Install hubzero-solr package
+
+# Current issues
+
+Can't login and all clicked links don't work
+
