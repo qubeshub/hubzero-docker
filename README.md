@@ -9,23 +9,26 @@
 ```bash
 git clone https://github.com/qubeshub/hubzero-docker.git ./hubzero-docker
 cd hubzero-docker
+git checkout alt
 ```
 
 (3) Install CMS
 
 ```bash
 git clone https://github.com/hubzero/hubzero-cms.git ./public
+cd public
+cp -R ../.ddev .
+cp -R ../app .
 ddev config --php-version=8.2 --database=mariadb:10.11
 ddev start
-ddev import-db --file=databasedump.sql --database=example
-ddev import-files --source=app
+ddev import-db --file=../databasedump.sql --database=example
 ```
 
 (4) Run setup scripts
 
 ```bash
 ddev ssh
-cd public/core
+cd core
 php bin/composer install
 php bin/muse migration -f
 exit
@@ -40,14 +43,15 @@ ddev launch
 # Additional DDEV Configuration
 
 - `.ddev/config.yaml`
-  - `docroot: public`
-  - `webserver_type: apache-fpm`
-  - `upload_dirs: app` (So Mutagen doesn't sync these files)
+  - `docroot: ""`
+  - `webserver_type: nginx-fpm`
+  - Upload dirs (`upload_dirs`) not set on this branch
   - `web_extra_daemons`: Launch Solr
 - `mysql/sql-mode.cnf`: Make sure mysql strict mode isn't set so migrations can run
 - `web-build/Dockerfile`: Install hubzero-solr package
 
 # Current issues
 
-Can't login and all clicked links don't work
+- Can't log into admin interace (404)
+- When `webserver_type` is `apache-fpm`, front page will load but all links lead to a 404
 

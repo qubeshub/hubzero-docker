@@ -1,6 +1,6 @@
 name: hubzero-2.4
 type: php
-docroot: public
+docroot: ""
 php_version: "8.2"
 webserver_type: apache-fpm
 xdebug_enabled: false
@@ -9,8 +9,6 @@ additional_fqdns: []
 database:
     type: mariadb
     version: "10.11"
-upload_dirs:
-    - app
 use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
