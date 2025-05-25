@@ -14,22 +14,18 @@ cd hubzero-docker
 (3) Install CMS
 
 ```bash
-git clone https://github.com/qubeshub/hubzero-cms.git ./qubeshub
-cd qubeshub
-rm -rf app/config
-cp -r ../config app/config
-ddev config --php-version=5.6 --database=mysql:5.5
+git clone https://github.com/hubzero/hubzero-cms.git ./public
+ddev config --php-version=8.2 --database=mariadb:10.11
 ddev start
-ddev import-db --file=../databasedump.sql --database=example
+ddev import-db --file=databasedump.sql --database=example
+ddev import-files --source=app
 ```
 
 (4) Run setup scripts
 
 ```bash
 ddev ssh
-cd core
+cd public/core
 php bin/composer install
-cd ..
-php muse migration --file=Migration20180126160144ComSearch.php -f
-php muse migration -f
+php bin/muse migration -f
 ```
