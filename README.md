@@ -44,11 +44,6 @@ ddev launch
   - `webserver_type: nginx-fpm`
   - `upload_dirs: app` (So Mutagen doesn't sync these files)
   - `web_extra_daemons`: Launch Solr
-- `mysql/sql-mode.cnf`: Make sure mysql strict mode isn't set so migrations can run
+- `nginx_full/nginx-site.conf`: Redirect /administrator and /api to /index.php
+- `mysql/sql-mode.cnf`: Make sure mysql strict mode isn't set so migrations can run (presumably can be removed after migration to reinstate strict mode)
 - `web-build/Dockerfile`: Install hubzero-solr package
-
-# Current issues
-
-- Can't log into admin interace (404)
-- When `webserver_type` is `apache-fpm`, front page will load but all links lead to a 404
-
