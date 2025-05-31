@@ -14,11 +14,11 @@ cd hubzero-docker
 (3) Install CMS
 
 ```bash
-git clone https://github.com/hubzero/hubzero-cms.git ./public
+git clone https://github.com/qubeshub/hubzero-cms.git ./public
+cp -r app/config public/app/config
 ddev config --php-version=8.2 --database=mariadb:10.11
 ddev start
 ddev import-db --file=databasedump.sql --database=example
-ddev import-files --source=app
 ```
 
 (4) Run setup scripts
@@ -42,8 +42,8 @@ ddev launch
 - `.ddev/config.yaml`
   - `docroot: public`
   - `webserver_type: nginx-fpm`
-  - `upload_dirs: app` (So Mutagen doesn't sync these files)
-  - `web_extra_daemons`: Launch Solr
+  - `upload_dirs: app/site` (So Mutagen doesn't sync these files)
+  - `hooks`: Launch Solr
 - `nginx_full/nginx-site.conf`: Redirect /administrator and /api to /index.php
 - `mysql/sql-mode.cnf`: Make sure mysql strict mode isn't set so migrations can run (presumably can be removed after migration to reinstate strict mode)
 - `web-build/Dockerfile`: Install hubzero-solr package
