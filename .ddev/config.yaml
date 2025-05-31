@@ -15,10 +15,9 @@ use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
 corepack_enable: false
-web_extra_daemons:
-    - name: hubzero-solr
-      command: /etc/init.d/hubzero-solr start
-      directory: /etc/init.d
+hooks:
+  post-start:
+    - exec: "sudo /etc/init.d/hubzero-solr start"
 
 # Key features of DDEV's config.yaml:
 
