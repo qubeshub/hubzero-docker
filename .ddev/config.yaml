@@ -18,6 +18,11 @@ corepack_enable: false
 hooks:
   post-start:
     - exec: "sudo /etc/init.d/hubzero-solr start"
+web_extra_exposed_ports:
+  - name: hubzero-solr
+    container_port: 8445
+    http_port: 8445
+    https_port: 8444
 
 # Key features of DDEV's config.yaml:
 
