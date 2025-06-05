@@ -1,0 +1,4 @@
+services:
+  web:
+    volumes:
+    - "$HOME/dev/hubzero/hubzero-2.4/data/example:/srv/example"

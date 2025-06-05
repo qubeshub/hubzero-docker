@@ -8,8 +8,3 @@ RUN curl -L https://packages.hubzero.org/deb/hubzero-signing-key.asc -o /etc/apt
 
 RUN apt-get update
 RUN apt-get install -y hubzero-solr
-
-## Transfer project space from Vagrant
-## COPY projects.tar.gz /var/tmp/projects.tar.gz
-
-## RUN cd /srv && tar xvf /var/tmp/projects.tar.gz

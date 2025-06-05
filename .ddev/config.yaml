@@ -11,6 +11,7 @@ database:
     version: "10.11"
 upload_dirs:
     - app/site
+    - ../data/example
 use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
