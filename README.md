@@ -52,11 +52,33 @@ The following lists the additional configuration settings with their explanation
   - `webserver_type: nginx-fpm`
   - `upload_dirs`: `app/site` and `../data/example` (So Mutagen doesn't sync these files - they will instead be mounted in Docker images). Note that the paths are relative to `docroot`.
   - `hooks`: Launch Solr
-  - `web_extra_exposed_ports`: Access to Solr Admin at http://<project name>.ddev.site:8445
-- `nginx_full/nginx-site.conf`: Redirect /administrator and /api to /index.php
+  - `web_extra_exposed_ports`: Access to Solr Admin at http://{project name}.ddev.site:8445
+- `nginx_full/nginx-site.conf`: Redirect /administrator and /api to /index.php. Also turns off fastcgi buffering to avoid excessive PHP warnings.
 - `mysql/sql-mode.cnf`: Make sure mysql strict mode isn't set so migrations can run (presumably can be removed after migration to reinstate strict mode)
 - `web-build/Dockerfile`: Install hubzero-solr package
 - `docker-compose.mounts.yaml`: Mount `data/example` directory to `/srv/example` inside the container. This is used for project files and will ensure persistence across ddev status updates (such as `ddev restart`, `ddev stop`, and even `ddev destroy`).
+
+## Troubleshooting
+
+The command `ddev logs` is very helpful and will show you PHP and database logs. If you want realtime log updates, include the `-f` flag. The following command shows realtime log updates and color codes warning (`[warn]`) and error (`[error]`) messages, filtering out all other message types, such as information-only (`[info]`):
+
+```bash
+ddev logs -f | stdbuf -oL grep -iE '\[warn\]|\[error\]' | stdbuf -oL perl -pe '
+    s/\[warn\]/\e[33m[warn]\e[0m/i;
+    s/\[error\]/\e[31m[error]\e[0m/i;
+  '
+```
+
+Or, use the following if you want a bash function (e.g., include in your `.bashrc` file):
+
+```bash
+ddev_logs() {
+  ddev logs -f | stdbuf -oL grep -iE '\[warn\]|\[error\]' | stdbuf -oL perl -pe '
+    s/\[warn\]/\e[33m[warn]\e[0m/i;
+    s/\[error\]/\e[31m[error]\e[0m/i;
+  '
+}
+```
 
 ## Solr
 
