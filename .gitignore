@@ -1,3 +1,5 @@
 .DS_STORE
 public/
-data/example/projects/
+.ddev/traefik/
+app/logs/*.log
+data/

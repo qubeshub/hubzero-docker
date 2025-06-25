@@ -7,8 +7,8 @@
 (2) Clone this repository
 
 ```bash
-git clone https://github.com/qubeshub/hubzero-docker.git ./hubzero-docker
-cd hubzero-docker
+git clone https://github.com/qubeshub/hubzero-docker.git ./qubeshub
+cd qubeshub
 ```
 
 (3) Install CMS

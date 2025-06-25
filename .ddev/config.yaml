@@ -1,4 +1,4 @@
-name: hubzero-2.4
+name: qubeshub
 type: php
 docroot: public
 php_version: "8.2"
@@ -9,6 +9,9 @@ additional_fqdns: []
 database:
     type: mariadb
     version: "10.11"
+hooks:
+    post-start:
+        - exec: sudo /etc/init.d/hubzero-solr start
 upload_dirs:
     - app/site
     - ../data/example
@@ -16,14 +19,11 @@ use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
 corepack_enable: false
-hooks:
-  post-start:
-    - exec: "sudo /etc/init.d/hubzero-solr start"
 web_extra_exposed_ports:
-  - name: hubzero-solr
-    container_port: 8445
-    http_port: 8445
-    https_port: 8444
+    - name: hubzero-solr
+      container_port: 8445
+      http_port: 8445
+      https_port: 8444
 
 # Key features of DDEV's config.yaml:
 
