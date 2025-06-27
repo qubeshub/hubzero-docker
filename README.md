@@ -55,6 +55,11 @@ php bin/muse migration -f
 exit
 ```
 
+Note: The `migration` command will likely throw the following error, which you can ignore:
+```bash
+PHP Fatal error:  Uncaught Error: Call to undefined function Hubzero\Base\fastcgi_finish_request()
+```
+
 (5) Launch the site!
 
 ```bash
