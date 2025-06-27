@@ -23,6 +23,7 @@ cd hubzero
 </details>
 <p></p>
 (3) Install CMS
+<p></p>
 
 ```bash
 git clone https://github.com/qubeshub/hubzero-cms.git ./public
@@ -46,6 +47,7 @@ ddev import-db --file=data/databasedump_hubzero.sql.gz --database=example
 </details>
 <p></p>
 (4) Run setup scripts
+<p></p>
 
 ```bash
 ddev ssh
@@ -56,7 +58,7 @@ exit
 ```
 
 Note: The `migration` command will likely throw the following error, which you can ignore:
-```bash
+```
 PHP Fatal error:  Uncaught Error: Call to undefined function Hubzero\Base\fastcgi_finish_request()
 ```
 
@@ -65,6 +67,15 @@ PHP Fatal error:  Uncaught Error: Call to undefined function Hubzero\Base\fastcg
 ```bash
 ddev launch
 ```
+
+This will open a web browser and, if you didn't change the DDEV project name, go to `https://qubeshub.ddev.site`. If you did change the DDEV project name, the site will be located at `https://<project name>.ddev.site` (e.g. `https://hubzero.ddev.site` if you ran alternate commands above for a Hubzero container with no QUBES template/configuration).
+
+# Admin credentials
+
+The administrative interface is located at `https://qubeshub.ddev.site/administrator`. The login credentials are:
+
+**Username**: `admin` <br />
+**Password**: `vagrant2016`
 
 # What to do on restarting ddev
 
