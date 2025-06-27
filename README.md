@@ -11,16 +11,40 @@ git clone https://github.com/qubeshub/hubzero-docker.git ./qubeshub
 cd qubeshub
 ```
 
+<details>
+<summary>
+Alternate commands for a Hubzero container with no QUBES template/configuration
+</summary>
+
+```bash
+git clone https://github.com/qubeshub/hubzero-docker.git ./hubzero
+cd hubzero
+```
+</details>
+<p></p>
 (3) Install CMS
 
 ```bash
 git clone https://github.com/qubeshub/hubzero-cms.git ./public
 cp -r app/config public/app/config
-ddev config --php-version=8.2 --database=mariadb:10.11
 ddev start
-ddev import-db --file=data/databasedump.sql --database=example
+ddev import-db --file=data/databasedump_qubeshub.sql.gz --database=example
 ```
 
+<details>
+<summary>
+Alternate commands for a Hubzero container with no QUBES template/configuration
+</summary>
+
+```bash
+git clone https://github.com/hubzero/hubzero-cms.git ./public
+cp -r app/config public/app/config
+ddev config --project-name=hubzero
+ddev start
+ddev import-db --file=data/databasedump_hubzero.sql.gz --database=example
+```
+</details>
+<p></p>
 (4) Run setup scripts
 
 ```bash
