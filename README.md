@@ -171,7 +171,7 @@ This section is for developers of supergroups on QUBES. We will assume that your
 
 6. Go to Users -> Groups, find the row associated with your new group, and write down the **4-digit number** in the GROUP ID column (yeah, I know, it's confusing that the Group ID field when creating a group is a word/string, while GROUP ID on the back-end is a numeric ID. _Technically_ throughout the codebase, and in the database, `id` refers to the numeric ID, and `cn` refers to the shortname, e.g. `mysupergroup`).
 
-7. Edit the new group on the back-end by either clicking the name or checking the box and selecting "Edit". In the DETAILS pane at the very top, change the Type from `Hub` to `Super` and click the "Save & Close" star icon in the upper right (Note: You can ignore the plethora of text in the yellow warning box).
+7. <a id="sg_switch"></a>Edit the new group on the back-end by either clicking the name or checking the box and selecting "Edit". In the DETAILS pane at the very top, change the Type from `Hub` to `Super` and click the "Save & Close" star icon in the upper right (Note: You can ignore the plethora of text in the yellow warning box).
 
 8. From the main DDEV project directory (e.g. `qubeshub`), go to the `public/app/site/groups` subdirectory (this is where all group file uploads and supergroup templates are located).
 
@@ -200,7 +200,7 @@ If supergroup developers would like access to their own database (named `sg_mysu
 
 1. From the main ddev directory (e.g., `qubeshub`), run the command 
    ```ddev mysql -uroot -proot -e 'GRANT CREATE, DROP ON `sg\_%`.* TO root'```.
-2. From the supergroup directory (`public/app/site/groups/<group id>`), create the following database config file `config/db.php`:
+2. From the supergroup directory (`qubeshub/public/app/site/groups/<group id>`), create the following database config file `config/db.php`:
 
    ```php
    <?php
@@ -213,6 +213,17 @@ If supergroup developers would like access to their own database (named `sg_mysu
       'prefix'   => ''
    );
    ```
+
+If you've successfully run the command in Step 1, then any time you change a group from type Hub to Super (see [Step 7](#sg_switch) above), the supergroup database will be automatically created. If you already have a supergroup prior to running the command in Step 1, you can manually create the database using two techniques (executed from the main ddev directory):
+
+1. [**If you want a clean empty database**]: ```ddev mysql -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS `sg_mysupergroup`'```
+2. [**If you have a database dump file**]: ```ddev import-db --file=<dump file> --database=sg_mysupergroup```
+
+Once the supergroup database is set up, you can access the database within your PHP code with:
+
+```php
+$sg_db = \Hubzero\User\Group\Helper::getDBO();
+```
 
 ## Performance and file syncing
 
