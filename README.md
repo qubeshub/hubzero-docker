@@ -39,7 +39,7 @@ Alternate commands for a Hubzero container with no QUBES template/configuration
 
 ```bash
 git clone https://github.com/hubzero/hubzero-cms.git ./public
-cp -r app/config public/app/config
+mkdir -p public/app && cp -R app/config public/app/
 ddev config --project-name=hubzero
 ddev start
 ddev import-db --file=data/databasedump_hubzero.sql.gz --database=example
