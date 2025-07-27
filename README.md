@@ -1,74 +1,72 @@
 # Steps to set up a QUBES development environment
 
-(1) Install `ddev`
+1. Install `ddev` (https://ddev.com/get-started/)
 
-https://ddev.com/get-started/
+2. Clone this repository
 
-(2) Clone this repository
+   ```bash
+   git clone https://github.com/qubeshub/hubzero-docker.git ./qubeshub
+   cd qubeshub
+   ```
 
-```bash
-git clone https://github.com/qubeshub/hubzero-docker.git ./qubeshub
-cd qubeshub
-```
+   <details>
+   <summary>
+   Alternate commands for a Hubzero container with no QUBES template/configuration
+   </summary>
 
-<details>
-<summary>
-Alternate commands for a Hubzero container with no QUBES template/configuration
-</summary>
+   ```bash
+   git clone https://github.com/qubeshub/hubzero-docker.git ./hubzero
+   cd hubzero
+   ```
+   </details>
+   <p></p>
+3. Install CMS
+   <p></p>
 
-```bash
-git clone https://github.com/qubeshub/hubzero-docker.git ./hubzero
-cd hubzero
-```
-</details>
-<p></p>
-(3) Install CMS
-<p></p>
+   ```bash
+   git clone https://github.com/qubeshub/hubzero-cms.git ./public
+   cp -r app/config public/app/config
+   ddev start
+   ddev import-db --file=data/databasedump_qubeshub.sql.gz --database=example
+   ```
 
-```bash
-git clone https://github.com/qubeshub/hubzero-cms.git ./public
-cp -r app/config public/app/config
-ddev start
-ddev import-db --file=data/databasedump_qubeshub.sql.gz --database=example
-```
+   <details>
+   <summary>
+   Alternate commands for a Hubzero container with no QUBES template/configuration
+   </summary>
 
-<details>
-<summary>
-Alternate commands for a Hubzero container with no QUBES template/configuration
-</summary>
+   ```bash
+   git clone https://github.com/hubzero/hubzero-cms.git ./public
+   mkdir -p public/app && cp -R app/config public/app/
+   ddev config --project-name=hubzero
+   ddev start
+   ddev import-db --file=data/databasedump_hubzero.sql.gz --database=example
+   ```
+   </details>
+   <p></p>
+4. Run setup scripts
+   <p></p>
 
-```bash
-git clone https://github.com/hubzero/hubzero-cms.git ./public
-mkdir -p public/app && cp -R app/config public/app/
-ddev config --project-name=hubzero
-ddev start
-ddev import-db --file=data/databasedump_hubzero.sql.gz --database=example
-```
-</details>
-<p></p>
-(4) Run setup scripts
-<p></p>
+   ```bash
+   ddev ssh
+   cd public/core
+   php bin/composer install
+   php bin/muse migration -f
+   exit
+   ```
 
-```bash
-ddev ssh
-cd public/core
-php bin/composer install
-php bin/muse migration -f
-exit
-```
+   Note: The `migration` command will likely throw the following error, which you can ignore:
+   ```
+   PHP Fatal error:  Uncaught Error: Call to undefined function Hubzero\Base\fastcgi_finish_request()
+   ```
 
-Note: The `migration` command will likely throw the following error, which you can ignore:
-```
-PHP Fatal error:  Uncaught Error: Call to undefined function Hubzero\Base\fastcgi_finish_request()
-```
+5. Launch the site!
 
-(5) Launch the site!
+   ```bash
+   ddev launch
+   ```
 
-```bash
-ddev launch
-```
-
-This will open a web browser and, if you didn't change the DDEV project name, go to https://qubeshub.ddev.site. If you did change the DDEV project name, the site will be located at `https://<project name>.ddev.site` (e.g. https://hubzero.ddev.site if you ran alternate commands above for a Hubzero container with no QUBES template/configuration).
+   This will open a web browser and, if you didn't change the DDEV project name, go to https://qubeshub.ddev.site. If you did change the DDEV project name, the site will be located at `https://<project name>.ddev.site` (e.g. https://hubzero.ddev.site if you ran alternate commands above for a Hubzero container with no QUBES template/configuration).
 
 ## Admin credentials
 
@@ -83,19 +81,19 @@ Note: If the above password doesn't work, try the password `vagrant2016`.
 
 It is best practice when logging in to the front-end website for testing and development to use a non-admin account. Here are the steps to create a new non-admin user/account.
 
-(1) Go to https://qubeshub.ddev.site/register.
+1. Go to https://qubeshub.ddev.site/register.
 
-(2) Complete the form to register for an account (you can use a real email here -- there will be future instructions on how to set up mail capabilities for development and testing).
+2. Complete the form to register for an account (you can use a real email here -- there will be future instructions on how to set up mail capabilities for development and testing).
 
-(3) Log into the [administrator interface](#admin-credentials). Since mail capabilities aren't working yet, you'll have to manually confirm your new user using the admin account.
+3. Log into the [administrator interface](#admin-credentials). Since mail capabilities aren't working yet, you'll have to manually confirm your new user using the admin account.
 
-(4) Go to Users -> Members in the administrator interface, find the new user, and hover over the caret next to "Unconfirmed" in the STATUS column. Choose "Confirm email". The status should change to "Not Approved".
+4. Go to Users -> Members in the administrator interface, find the new user, and hover over the caret next to "Unconfirmed" in the STATUS column. Choose "Confirm email". The status should change to "Not Approved".
 
-(5) Hover over the caret next to "Not Approved" and choose "Approve". You should now be able to log in to the front-end as the new user.
+5. Hover over the caret next to "Not Approved" and choose "Approve". You should now be able to log in to the front-end as the new user.
 
 ## Database access
 
-For a more detailed account of database management using DDEV, see https://ddev.readthedocs.io/en/stable/users/usage/database-management/.
+The database for the site is named `example`. For a more detailed account of database management using DDEV, see https://ddev.readthedocs.io/en/stable/users/usage/database-management/.
 
 ### MacOS
 
@@ -159,27 +157,27 @@ In this case, our database port is 32864, and the resulting line in the `.devdbr
 
 This section is for developers of supergroups on QUBES. We will assume that your supergroup already exists on QUBES and you have developer access to the resulting [GitLab](https://gitlab.hubzero.org/) repository. If not, please [submit a support ticket](https://qubeshub.org/support/ticket/new) requesting access.
 
-(0) Once you have developer access to GitLab, [log in to GitLab](https://gitlab.hubzero.org/). Go to the remote repository for your supergroup, e.g. https://gitlab.hubzero.org/hub-qubeshub/sg_mysupergroup, replacing `mysupergroup` with the shortname for your group on QUBES (e.g. if you access your supergroup on QUBES via https://qubeshub.org/community/groups/mysupergroup, then your shortname would be `mysupergroup` and the above GitLab URL would work). If you have direct push access to this repository, then you can clone this one in Step 10 below. Otherwise, fork this repository, and clone the forked repository in Step 10 below.
+0. Once you have developer access to GitLab, [log in to GitLab](https://gitlab.hubzero.org/). Go to the remote repository for your supergroup, e.g. https://gitlab.hubzero.org/hub-qubeshub/sg_mysupergroup, replacing `mysupergroup` with the shortname for your group on QUBES (e.g. if you access your supergroup on QUBES via https://qubeshub.org/community/groups/mysupergroup, then your shortname would be `mysupergroup` and the above GitLab URL would work). If you have direct push access to this repository, then you can clone this one in Step 10 below. Otherwise, fork this repository, and clone the forked repository in Step 10 below.
 
-(1) [Follow the steps above](#steps-to-set-up-a-qubes-development-environment) to set up a QUBES development environment.
+1. [Follow the steps above](#steps-to-set-up-a-qubes-development-environment) to set up a QUBES development environment.
 
-(2) [Follow the steps above](#create-a-non-admin-useraccount) to create a new non-admin user account if you have not already done so.
+2. [Follow the steps above](#create-a-non-admin-useraccount) to create a new non-admin user account if you have not already done so.
 
-(3) Log in to the front-end (https://qubeshub.ddev.site) with your non-admin user account.
+3. Log in to the front-end (https://qubeshub.ddev.site) with your non-admin user account.
 
-(4) [Create a new group](https://qubeshub.ddev.site/community/groups/new), using the same Group ID as on QUBES (e.g. if you access your supergroup on QUBES via https://qubeshub.org/community/groups/mysupergroup, then your Group ID should be `mysupergroup`).
+4. [Create a new group](https://qubeshub.ddev.site/community/groups/new), using the same Group ID as on QUBES (e.g. if you access your supergroup on QUBES via https://qubeshub.org/community/groups/mysupergroup, then your Group ID should be `mysupergroup`).
 
-(5) Log in to the [administrative interface](https://qubeshub.ddev.site/administrator) using [the admin login credentials](#admin-credentials).
+5. Log in to the [administrative interface](https://qubeshub.ddev.site/administrator) using [the admin login credentials](#admin-credentials).
 
-(6) Go to Users -> Groups, find the row associated with your new group, and write down the **4-digit number** in the GROUP ID column (yeah, I know, it's confusing that the Group ID field when creating a group is a word/string, while GROUP ID on the back-end is a numeric ID. _Technically_ throughout the codebase, and in the database, `id` refers to the numeric ID, and `cn` refers to the shortname, e.g. `mysupergroup`).
+6. Go to Users -> Groups, find the row associated with your new group, and write down the **4-digit number** in the GROUP ID column (yeah, I know, it's confusing that the Group ID field when creating a group is a word/string, while GROUP ID on the back-end is a numeric ID. _Technically_ throughout the codebase, and in the database, `id` refers to the numeric ID, and `cn` refers to the shortname, e.g. `mysupergroup`).
 
-(7) Edit the new group on the back-end by either clicking the name or checking the box and selecting "Edit". In the DETAILS pane at the very top, change the Type from `Hub` to `Super` and click the "Save & Close" star icon in the upper right (Note: You can ignore the plethora of text in the yellow warning box).
+7. Edit the new group on the back-end by either clicking the name or checking the box and selecting "Edit". In the DETAILS pane at the very top, change the Type from `Hub` to `Super` and click the "Save & Close" star icon in the upper right (Note: You can ignore the plethora of text in the yellow warning box).
 
-(8) From the main DDEV project directory (e.g. `qubeshub`), go to the `public/app/site/groups` subdirectory (this is where all group file uploads and supergroup templates are located).
+8. From the main DDEV project directory (e.g. `qubeshub`), go to the `public/app/site/groups` subdirectory (this is where all group file uploads and supergroup templates are located).
 
-(9) Using the **numeric** group id you wrote down from before, delete the subdirectory `public/app/site/groups/<group id>`. For example, if your numeric group id is 1234, then the subdirectory to delete is `public/app/site/groups/1234` (BE CAREFUL! You might instead opt to just move the directory to something like `_1234`). We are going to replace it with a local version of the GitLab repository in the next step.
+9. Using the **numeric** group id you wrote down from before, delete the subdirectory `public/app/site/groups/<group id>`. For example, if your numeric group id is 1234, then the subdirectory to delete is `public/app/site/groups/1234` (BE CAREFUL! You might instead opt to just move the directory to something like `_1234`). We are going to replace it with a local version of the GitLab repository in the next step.
 
-(10) Either from a terminal or using a Git GUI, clone the GitLab repository in Step 0 into the subdirectory you just deleted, `public/app/site/groups/<group id>`. For example, if you are using a terminal and are in the subdirectory `public/app/site/groups`, the command would be something like: `git clone https://gitlab.hubzero.org/hub-qubeshub/sg_simiode.git ./<group id>`. If it is a fork, then replace `hub-qubeshub` with your GitLab username.
+10. Either from a terminal or using a Git GUI, clone the GitLab repository in Step 0 into the subdirectory you just deleted, `public/app/site/groups/<group id>`. For example, if you are using a terminal and are in the subdirectory `public/app/site/groups`, the command would be something like: `git clone https://gitlab.hubzero.org/hub-qubeshub/sg_simiode.git ./<group id>`. If it is a fork, then replace `hub-qubeshub` with your GitLab username.
 
 That's it! When you access your supergroup from the development machine (e.g. https://qubeshub.ddev.site/community/groups/mysupergroup), it should show your template from the GitLab repository. You can now make changes and commit them to your local repository at `qubeshub\public\app\site\groups\<group id>`, pushing up to the remote repository when you are ready.
 
@@ -195,6 +193,26 @@ Once you have pushed any changes/commits to the remote repository, you'll need t
    - Click the merge button
  - If you do not have QUBES administrator access:
    - [Submit a support ticket](https://qubeshub.org/support/ticket/new) requesting someone pull in your code updates to the supergroup on QUBES
+
+### Setting up supergroup database access
+
+If supergroup developers would like access to their own database (named `sg_mysupergroup`, if `mysupergroup` is the shortname for your group), a couple of additional steps need to be taken.
+
+1. From the main ddev directory (e.g., `qubeshub`), run the command 
+   ```ddev mysql -uroot -proot -e 'GRANT CREATE, DROP ON `sg\_%`.* TO root'```.
+2. From the supergroup directory (`public/app/site/groups/<group id>`), create the following database config file `config/db.php`:
+
+   ```php
+   <?php
+   return array(
+      'driver' => 'pdo',
+      'host' => 'db',
+      'user' => 'root',
+      'password' => 'root',
+      'database' => 'sg_mysupergroup', // Replace mysupergroup with your group's shortname
+      'prefix'   => ''
+   );
+   ```
 
 ## Performance and file syncing
 
