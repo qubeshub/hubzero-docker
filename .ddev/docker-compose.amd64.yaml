@@ -1,0 +1,4 @@
+services:
+  web:
+    # Force the DDEV web image to run as `linux/amd64` on Apple Silicon with Rosetta
+    platform: linux/amd64
